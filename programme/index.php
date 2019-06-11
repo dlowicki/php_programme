@@ -189,7 +189,7 @@
 
     /*function createSQLConnection() {
       $servername = 'vm-s-ka-sql';
-      $data = array("Database" => "ACMP201206110953", "UID" => "sa", "PWD" => "aagon@12");
+      $data = array("Database" => "*****", "UID" => "*********", "PWD" => "******");
       $conn = sqlsrv_connect($servername, $data);
       //$conn = mssql_connect($servername, "sa", "aagon@12");
 
