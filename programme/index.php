@@ -191,7 +191,7 @@
       $servername = 'vm-s-ka-sql';
       $data = array("Database" => "*****", "UID" => "*********", "PWD" => "******");
       $conn = sqlsrv_connect($servername, $data);
-      //$conn = mssql_connect($servername, "sa", "aagon@12");
+      //$conn = mssql_connect($servername, "***********", "******");
 
       if($conn){
         echo "Verbindng aufgebaut";
