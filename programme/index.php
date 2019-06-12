@@ -3,65 +3,22 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <script src="jquery.min.js"></script>
     <title>Programme</title>
+    <?php
+    session_start();
+      if(isset($_GET['style'])){
+        if($_GET['style'] == "modern"){
+          echo '<link rel="stylesheet" href="style/modern.css">';
+          $_SESSION['style'] = "modern";
+        } else {
+          echo '<link rel="stylesheet" href="style/compact.css">';
+          $_SESSION['style'] = "compact";
+        }
+      }
+    ?>
   </head>
   <body>
-    <style>
-
-    body {
-        background-color: darkgray;
-        width: 60vw;
-        margin-left: auto;
-        margin-right: auto;
-        font-family: sans-serif;
-        font-size: 1.2vw;
-    }
-
-      text {
-        color: blue;
-      }
-
-      span {
-        color: red;
-      }
-
-      #msg_update {
-        text-align:center;
-        font-size: 1.4vw;
-      }
-
-      #msg_log {
-        text-align: left;
-        width: 55vw;
-        margin-left: auto;
-        margin-right: auto;
-        height: 50vh;
-        overflow: auto;
-      }
-
-      #last {
-        position: absolute;
-        right: 2vw;
-        top: 0;
-      }
-
-      #current {
-        position: absolute;
-        left: 2vw;
-        top: 0;
-      }
-
-      table {
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 2vw;
-      }
-
-
-    </style>
-
-
-
     <?php
     function getVersionChip($url) {
       $source = file_get_contents($url);
@@ -102,8 +59,7 @@
       fclose($handle);
     }
 
-    function editVersions() {
-
+    function getUrls() {
       $urls = array(
         "CCleaner" => "https://www.chip.de/downloads/CCleaner_16317939.html",
         "Notepad++" => "https://www.chip.de/downloads/Notepad_12996935.html",
@@ -115,6 +71,12 @@
         "Adobe Acrobat Reader DC" => "https://www.chip.de/downloads/Adobe-Acrobat-Reader-DC_12998358.html",
         "Adobe Flash Player" => "https://www.chip.de/downloads/Adobe-Flash-Player_13003561.html"
       );
+      return $urls;
+    }
+
+    function editVersions() {
+
+      $urls = getUrls();
 
       $versions = "CCleaner=" . getVersionChip($urls["CCleaner"]) . "\r\n" .
       "Notepad++=" . getVersionChip($urls["Notepad++"]) . "\r\n" .
@@ -133,14 +95,13 @@
         // Geht jedes einzelne Program durch
         for($r=0;$r<sizeof($programs);$r++){
           $neue = getVersionChip($urls[$programs[$r]]);
-          //echo "<br>Wenn " . $oldVersions[$programs[$r]] . " nicht gleich " . $neue . "<br>";
           if($oldVersions[$programs[$r]] != $neue){
             $newVersion[$r] = $programs[$r] . " aktualisiert von <text>" . $oldVersions[$programs[$r]] . "</text> auf <span>" . $neue . "</span><br>";
           }
         }
 
         if(sizeof($newVersion) == 0){
-          echo "<div id='msg_update'>Es wurden seit der letzten Aktualisierung keine Updates veröffentlicht</div>";
+          echo "<div id='msg_update'><p>Es wurde seit der letzten Aktualisierung kein Update veröffentlicht</p></div>";
         } else {
           foreach ($newVersion as $key) {
             setLogUpdate($key);
@@ -154,7 +115,26 @@
 
       echo "<div id='time'>
       <p id='current'></p>
-      <p id='last'>Letzte Aktualisierung am " . getLastTime() . " Uhr</p>
+      <div id='menu'>
+        <ul>";
+        if($_SESSION['style'] == "modern"){
+          echo "<li><a href='index.php?style=modern' class='nav_current'>Modern</a></li>
+          <li><a href='index.php?style=compact' style='color: white;'>Kompakt</a></li>";
+        } else {
+          echo "<li><a href='index.php?style=modern' style='color: white;'>Modern</a></li>
+          <li><a href='index.php?style=compact' class='nav_current'>Kompakt</a></li>";
+        }
+        echo "
+        </ul>
+      </div>
+      <div id='last'><p id='last_update'>Letzte Aktualisierung am " . getLastTime() . " Uhr </p></div>
+        <div id='msg_ak'>
+          <div class='spinner'>
+            <div class='bounce1'></div>
+            <div class='bounce2'></div>
+            <div class='bounce3'></div>
+          </div>
+        </div>
       </div>";
     }
 
@@ -187,27 +167,10 @@
       fclose($handle);
     }
 
-    /*function createSQLConnection() {
-      $servername = 'vm-s-ka-sql';
-      $data = array("Database" => "*****", "UID" => "*********", "PWD" => "******");
-      $conn = sqlsrv_connect($servername, $data);
-      //$conn = mssql_connect($servername, "***********", "******");
-
-      if($conn){
-        echo "Verbindng aufgebaut";
-      } else {
-        echo "Verbindung konnte nicht aufgebaut werden";
-        die( print_r( sqlsrv_errors(), true));
-      }
-    }*/
-
-
-      //echo "Wenn " . ((int)getLastTime()+60) . " kleiner als " . (int)getCurrentTime() . " ist<br>";
-      //echo "Noch " . ((int)getLastTime()+60-(int)getCurrentTime() . " Sekunden");
-
-
       $versions = outputVersions();
-
+      echo "<div id='table'>";
+      echo "<div class='container'>";
+      echo "<h2>Die neusten Versionen</h2>";
       echo "<table>";
       echo "<tr><td>CCleaner</td><td>" . $versions["CCleaner"] . "</td></tr>";
       echo "<tr><td>Notepad++</td><td>" . $versions["Notepad++"] . "</td></tr>";
@@ -219,26 +182,60 @@
       echo "<tr><td>Adobe Acrobat Reader DC</td><td>" . $versions["Adobe Acrobat Reader DC"] . "</td></tr>";
       echo "<tr><td>Adobe Flash Player</td><td>" . $versions["Adobe Flash Player"] . "</td></tr>";
       echo "</table>";
+      echo "</div>";
+      echo "</div>";
 
       $update = outputUpdate();
+
       echo "<hr>";
       echo "<div id='msg_log'>";
+      echo "<div class='container'>";
+      echo "<h2>Aktualisierungs Log</h2>";
+        echo "<div id='msg_log_update'>";
+          foreach ($update as $key => $value) {
 
-      foreach ($update as $key) {
-        echo $key;
-      }
+            $urls = getUrls();
 
+            foreach ($urls as $key2 => $value2) {
+
+              $exp = explode(" aktualisiert", $value);
+
+              if($exp[0] == $key2){
+                echo "<a class='msg_log_eintrag' href='$value2'>[" . $key . "] " . $value . "</a>";
+              }
+            }
+          }
+        echo "</div>";
+
+        echo "</div>";
       echo "</div>";
       echo "<hr>";
 
-    //if(getLastTime()+60 < getCurrentTime()){
-      //createSQLConnection();
       editVersions();
-
-    //}
 
     ?>
     <script type="text/javascript">
+
+    function sleep (time) {
+      return new Promise((resolve) => setTimeout(resolve, time));
+    }
+
+    setInterval(function() {
+        document.getElementById("msg_ak").style.display = "block";
+        var last = document.getElementById("last_update").innerHTML;
+
+        var today2 = new Date();
+        var time2 = today2.getHours() + ":" + today2.getMinutes() + ":" + today2.getSeconds();
+        $("#last_update").load(location.href + " #last_update");
+
+        $("#msg_log_update").load(location.href + " #msg_log_update");
+
+        sleep(3000).then(() => {
+            document.getElementById("msg_ak").style.display = "none";
+        });
+
+      }, 60000);
+
       var today = new Date();
       var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
       var date = today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear();

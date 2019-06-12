@@ -1,0 +1,197 @@
+body {
+    background-color: ghostwhite;
+    width: 60vw;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: sans-serif;
+    font-size: 1.2vw;
+}
+
+  text {
+    color: blue;
+  }
+
+  span {
+    color: red;
+  }
+
+  #menu {
+    position:absolute;
+    top: 15%;
+    left: 2%;
+    border: 2px solid black;
+    width: 8%;
+    text-align: center;
+  }
+
+  #menu ul {
+    list-style: none;
+    width: auto;
+    padding: 0;
+  }
+
+  #menu ul li {
+    padding: 2%;
+  }
+
+  .nav_current {
+    color: lightblue;
+  }
+
+  #menu ul li a {
+    text-decoration: none;
+    background-color: rgba(100,100,100,1);
+    padding: 1%;
+    display: block;
+    width: auto;
+    transition: 0.5s;
+  }
+
+  #menu ul li a:hover {
+    background-color: rgba(100,100,100,0.5);
+  }
+
+  #msg_update {
+    position: absolute;
+    text-align:center;
+    font-size: 1.4vw;
+    background-color: white;
+    left: 2%;
+    top: 32.5%;
+    width: 35%;
+    -webkit-box-shadow: 6px 3px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 6px 3px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 6px 3px 5px 0px rgba(0,0,0,0.75);
+  }
+
+  #msg_log {
+    position: absolute;
+    width: 55vw;
+    right: 2%;
+    bottom: 7.5vw;
+  }
+
+  #msg_log_update {
+    text-align: left;
+    height: 60vh;
+    overflow: auto;
+    padding: 1%;
+  }
+
+  .msg_log_eintrag {
+    transition: 0.5s;
+    margin-top: 1%;
+    border: 1px solid black;
+    padding: 0.5%;
+    font-size: 0.9vw;
+    text-decoration: none;
+    color: black;
+    display: block;
+  }
+
+  .msg_log_eintrag:hover {
+    background-color: lightblue;
+    cursor: pointer;
+  }
+
+  #msg_ak {
+    position: absolute;
+    left: 2vw;
+    top: 0vw;
+    display: none;
+  }
+
+  hr {
+    display: none;
+  }
+
+#current {
+    position: absolute;
+    left: 2vw;
+    top: 0;
+  }
+
+  #last {
+    position: absolute;
+    left: 2vw;
+    top: 2vw;
+    width: 30%;
+    height: auto;
+  }
+
+  .container {
+    background-color: white;
+    -webkit-box-shadow: 6px 3px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 6px 3px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 6px 3px 5px 0px rgba(0,0,0,0.75);
+  }
+
+  .container h2 {
+    margin-bottom: -0%;
+    padding: 1%;
+    background-color: lightblue;
+  }
+
+  #table {
+    position: absolute;
+    left: 2%;
+    bottom: 30%;
+    width: 35%;
+    bottom: 7.5vw;
+  }
+
+  table {
+    width: 100%;
+    font-size: 1.3vw;
+    padding: 1%;
+  }
+
+  table tr {
+    transition: 0.5s;
+  }
+
+  table tr:hover {
+    background-color: rgba(100,100,100,0.5);
+  }
+
+  .spinner {
+  margin: 100px auto 0;
+  width: 70px;
+  text-align: center;
+}
+
+.spinner > div {
+  width: 18px;
+  height: 18px;
+  background-color: rgba(100,100,100,0.5);
+
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes sk-bouncedelay {
+  0%, 80%, 100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  } 40% {
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+  }
+}
