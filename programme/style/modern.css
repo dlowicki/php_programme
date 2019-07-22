@@ -5,6 +5,7 @@ body {
     margin-right: auto;
     font-family: sans-serif;
     font-size: 1.2vw;
+    height: 70vw;
 }
 
   text {
@@ -40,7 +41,6 @@ body {
 
   #menu ul li a {
     text-decoration: none;
-    background-color: rgba(100,100,100,1);
     padding: 1%;
     display: block;
     width: auto;
@@ -69,12 +69,13 @@ body {
     width: 55vw;
     right: 2%;
     bottom: 7.5vw;
+    height: 70vh;
   }
 
   #msg_log_update {
     text-align: left;
     height: 60vh;
-    overflow: auto;
+    overflow-y: scroll;
     padding: 1%;
   }
 
@@ -138,20 +139,138 @@ body {
     bottom: 30%;
     width: 35%;
     bottom: 7.5vw;
+    height: 40vh;
   }
 
   table {
     width: 100%;
     font-size: 1.3vw;
     padding: 1%;
+    height: 31.5vh;
   }
 
   table tr {
     transition: 0.5s;
+    position: relative;
+    text-align: center;
+
   }
 
   table tr:hover {
-    background-color: rgba(100,100,100,0.5);
+    background-color: lightblue;
+    cursor: pointer;
+  }
+
+  #tr_drop {
+    height: 31.8vh;
+    min-width: 100%;
+    display: none;
+    margin-top: -3.5%;
+
+  }
+
+  #tr_back {
+    float: right;
+    width: 5%;
+    height: 10%;
+    transition: 0.5s;
+  }
+
+  #tr_back:hover {
+    background-color: red;
+    cursor: pointer;
+  }
+
+  #tr_drop h3 {
+    padding-left: 4%;
+    font-size: 1.2vw;
+    padding-top: 2%;
+  }
+
+  #tr_img {
+    margin-left: 8%;
+    width: 12.5%;
+    height: 20%;
+  }
+
+  #tr_drop p {
+    float: right;
+    width: 20vw;
+    margin-top: -0%;
+    height: 10vh;
+    overflow: auto;
+    margin-right: 5vw;
+    font-size: 0.9vw;
+  }
+
+  #tr_drop h4 {
+    padding: 2%;
+    width: 70%;
+    float: left;
+    margin-left: 4%;
+    margin-top: 0;
+  }
+
+  #tr_drop button {
+    border: 0;
+    padding: 0.5%;
+    margin-right: 6%;
+    font-size: 1.2vw;
+    transition: 0.5s;
+    float: left;
+    margin-top: 3%;
+  }
+
+  #tr_drop button:hover {
+    cursor: pointer;
+    background-color: red;
+  }
+
+  #create_program {
+    position: absolute;
+    left: 2%;
+    bottom: -12vw;
+    width: 35vw;
+    height: 30vh;
+  }
+
+  #create_program form {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%;
+    display: block;
+    text-align: center;
+    height: 30vh;
+  }
+
+  #create_program input {
+    width: 60%;
+    display: block;
+    margin-top: -3%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #create_program input[type=submit] {
+    width: 40%;
+    margin-top: 5%;
+    border: 0;
+    font-size: 1.3vw;
+    transition: 0.5s;
+  }
+
+  #create_program input[type=submit]:hover {
+    background-color: lightblue;
+    cursor: pointer;
+  }
+
+  #create_program input[type=file] {
+    background-color: white;
+  }
+
+  #create_program p {
+    font-size: 1.2vw;
   }
 
   .spinner {

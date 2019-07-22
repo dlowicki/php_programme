@@ -4,6 +4,7 @@
   <head>
     <meta charset="utf-8">
     <script src="jquery.min.js"></script>
+    <script src="functions.js"></script>
     <title>Programme</title>
     <?php
     session_start();
@@ -119,9 +120,9 @@
         <ul>";
         if($_SESSION['style'] == "modern"){
           echo "<li><a href='index.php?style=modern' class='nav_current'>Modern</a></li>
-          <li><a href='index.php?style=compact' style='color: white;'>Kompakt</a></li>";
+          <li><a href='index.php?style=compact' style='color: black;'>Kompakt</a></li>";
         } else {
-          echo "<li><a href='index.php?style=modern' style='color: white;'>Modern</a></li>
+          echo "<li><a href='index.php?style=modern' style='color: black;'>Modern</a></li>
           <li><a href='index.php?style=compact' class='nav_current'>Kompakt</a></li>";
         }
         echo "
@@ -171,8 +172,7 @@
       echo "<div id='table'>";
       echo "<div class='container'>";
       echo "<h2>Die neusten Versionen</h2>";
-      echo "<table>";
-      echo "<tr><td>CCleaner</td><td>" . $versions["CCleaner"] . "</td></tr>";
+      echo "<table id='table_content'>";
       echo "<tr><td>Notepad++</td><td>" . $versions["Notepad++"] . "</td></tr>";
       echo "<tr><td>PDFCreator</td><td>" . $versions["PDFCreator"] . "</td></tr>";
       echo "<tr><td>PDF24</td><td>" . $versions["PDF24"] . "</td></tr>";
@@ -181,7 +181,16 @@
       echo "<tr><td>IrfanView</td><td>" . $versions["IrfanView"] . "</td></tr>";
       echo "<tr><td>Adobe Acrobat Reader DC</td><td>" . $versions["Adobe Acrobat Reader DC"] . "</td></tr>";
       echo "<tr><td>Adobe Flash Player</td><td>" . $versions["Adobe Flash Player"] . "</td></tr>";
+      echo "<tr><td>CCleaner</td><td>" . $versions["CCleaner"] . "</td></tr>";
       echo "</table>";
+      echo "<div id='tr_drop'>
+              <img src='img/x.ico' id='tr_back'>
+              <h3 id='tr_drop_headline'>Dein Name und Version</h3>
+              <img src='img/pdf24.jpg' id='tr_img'>
+              <p id='tr_drop_description'>Beschreibung abc bla bla bla</p>
+              <h4 id='tr_drop_delete'>Möchten Sie NAME wirklich entfernen?</h4>
+              <button>Entfernen</button>
+            </div>";
       echo "</div>";
       echo "</div>";
 
@@ -211,10 +220,151 @@
       echo "</div>";
       echo "<hr>";
 
+
+
+      echo  "<div id='create_program'>
+              <div class='container'>
+                <h2>Programm hinzufügen</h2>
+                <form method='POST' id='form_create' action='create.php'>
+                  <p>Chip URL zur Programmseite</p>
+                  <input type='text' name='url' id='form_url'>
+                  <p>Logo des Programms</p>
+                  <input type='file' id='form_file' accept='image/jpg' required>
+                  <p>Name des Programms</p>
+                  <input type='text' name='url' id='form_title' readonly>
+                  <input type='submit' name='create_button' class='form_button' id='form_button' value='Name erstellen' style='display: block;'>
+                  <input type='submit' name='create_button' class='form_button' id='form_button2' value='Senden' style='display: none;'>
+                </form>
+                </div>
+            </div>";
+/*
+  https://www.chip.de/downloads/Adobe-Acrobat-Reader-DC_12998358.html
+  https://www.chip.de/downloads/VLC-player-64-Bit_53513913.html
+*/
+
+
+
+
       editVersions();
 
     ?>
     <script type="text/javascript">
+
+    $("#form_create").submit(function(event){
+      event.preventDefault();
+
+      var title_style = document.getElementById("form_button").style.display;
+      if(title_style == "block"){
+        var url = $("#form_url").val();
+
+        if(!url.includes("https://www.chip.de/downloads/")){
+          alert("Keine richtige URL angegeben!");
+          $("#form_url").val("");
+          return;
+        }
+
+        var spl = url.split("https://www.chip.de/downloads/");
+        if(!(spl[1].length >= 13)){
+          alert("Die URL wurde nicht gefunden!");
+          return;
+        }
+        var anyString4 = spl[1].substring(spl[1].length - 5);
+        if(anyString4 != ".html"){
+          alert("Die URL wurde nicht gefunden!");
+          return;
+        }
+
+        console.log(spl[1]);
+        var spl2 = spl[1].split("_");
+        var spl3 = spl2[0].replace(/-/g, " ");
+
+
+        var correctname;
+        if(spl3.includes("64")){
+          correctname = spl3.split("64");
+        } else if(spl3.includes("32")) {
+          correctname = spl3.split("32");
+        } else {
+          correctname = spl3;
+        }
+
+        $("#form_title").val(correctname[0]);
+
+          document.getElementById("form_button").style.display = "none";
+          document.getElementById("form_button2").style.display = "block";
+
+        document.getElementById("form_title").readOnly = false;
+        return;
+      }
+
+
+      if($("#form_title").val().length > 5){
+        var name = $("#form_title").val();
+
+        var file_data = $('#form_file').prop('files')[0];
+        var form_data = new FormData();
+        form_data.append('file', file_data);
+
+        $.ajax({
+          url: "api/upload.php",
+          method: "POST",
+          data: form_data,
+          processData: false,
+          contentType: false,
+          cache: false,
+          success: function(result) {
+            if(result == "error"){
+              alert("Ein Fehler ist aufgetreten");
+              return;
+            } else if (result == "format") {
+              alert("Es werden nur .jpg Formate hochgeladen!");
+              return;
+            }
+
+              $.ajax({
+                url: "api/upload.php",
+                method: "POST",
+                data: {uploaded: "12345", title: name},
+                success: function(result) {
+                  alert(result);
+                  $("#form_title").val("");
+                  $("#form_file").val("");
+                  $("#form_url").val("");
+                  document.getElementById("form_button").style.display = "block";
+                  document.getElementById("form_button2").style.display = "none";
+                }
+              });
+          }
+        });
+      } else {
+        alert("Der Name muss länger als 5 Zeichen lang sein!");
+      }
+
+
+
+
+
+    });
+
+    $("#tr_back").click(function(){
+      close_tr();
+    });
+
+    $("td").click(function(){
+      var content = $(this).parent().text();
+      var splitted = content.split("Version");
+
+      $.getJSON('sync.php', function (data) {
+
+         $.each(data, function (name, value) {
+            if(name == splitted[0]){
+              open_tr(splitted[0], splitted[1], value);
+            }
+         });
+      });
+    });
+
+
 
     function sleep (time) {
       return new Promise((resolve) => setTimeout(resolve, time));
@@ -234,20 +384,20 @@
             document.getElementById("msg_ak").style.display = "none";
         });
 
-      }, 60000);
+      }, 300000);
 
       var today = new Date();
       var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
       var date = today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear();
 
-      document.getElementById("current").innerHTML = "Uhrzeit: " + date + " - " + time + " Uhrzeit";
+      document.getElementById("current").innerHTML = "Uhrzeit: " + date + " - " + time + " Uhr";
 
       setInterval(function(){
         var today = new Date();
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         var date = today.getDate() + "-" + (today.getMonth()+1) + "-" + today.getFullYear();
 
-        document.getElementById("current").innerHTML = "Uhrzeit: " + date + " - " + time + " Uhrzeit";
+        document.getElementById("current").innerHTML = "Uhrzeit: " + date + " - " + time + " Uhr";
 
       },1000);
 
